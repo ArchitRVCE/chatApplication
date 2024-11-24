@@ -1,16 +1,17 @@
 import express from 'express'
 import dotenv from "dotenv"
-import mongoose from "mongoose"
-
-
-//set-up database
-mongoose.connect("mongodb+srv://Archit:MyChatApk@mychatapk.ajsdp.mongodb.net/MyChatApk?retryWrites=true&w=majority&appName=MyChatApk")
-.then(response=>console.log(`Databse connected`))
-.catch(e=>console.log(`Error connected Databse: ${e.name}`))
 dotenv.config();
+import mongoose from "mongoose"
 
 const app = express()
 const PORT = process.env.PORT || 5000;
+const URI = process.env.URI
+
+//set-up database
+mongoose.connect(URI)
+.then(response=>console.log(`Databse connected`))
+.catch(e=>console.log(`Error connected Databse: ${e.name}`))
+
 
 app.get('/',(req,res)=>{
     res.status(200).send('Api is running');
