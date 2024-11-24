@@ -1,5 +1,12 @@
 import express from 'express'
 import dotenv from "dotenv"
+import mongoose from "mongoose"
+
+
+//set-up database
+mongoose.connect("mongodb+srv://Archit:MyChatApk@mychatapk.ajsdp.mongodb.net/MyChatApk?retryWrites=true&w=majority&appName=MyChatApk")
+.then(response=>console.log(`Databse connected`))
+.catch(e=>console.log(`Error connected Databse: ${e.name}`))
 dotenv.config();
 
 const app = express()
