@@ -6,12 +6,13 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import {Routes,Route} from "react-router-dom"
 
+
 import HomePage from './Pages/HomePage';
 import ChatPage from './Pages/ChatPage';
 
 function App() {
   return (
-    <div className=''>
+    <div className='App'>
       <Routes>
         <Route exact path="/" element={<HomePage/>}></Route>
         <Route path="/chat" element={<ChatPage/>}></Route>
