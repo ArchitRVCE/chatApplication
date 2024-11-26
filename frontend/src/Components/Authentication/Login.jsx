@@ -1,8 +1,10 @@
 import React,{useState} from 'react'
+import { useNavigate} from "react-router-dom"
 import { TextField, RadioGroup, FormControlLabel, Radio, Checkbox, Button, FormControl, FormLabel, Box,Input,  InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import axios from "axios"
 
 const validationSchema = Yup.object({
   email: Yup.string().email('Invalid email address').required('Email is required'),
@@ -10,9 +12,9 @@ const validationSchema = Yup.object({
 });
 
 const Login = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [email,setEmail] = useState('');
-  const [password,setPassword] = useState('');
+  const [loading,setLoading] = useState('');
   const handleClickShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
@@ -26,7 +28,19 @@ const Login = () => {
       }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
-        console.log(values);
+        setLoading(true);
+        const {name,email,password} = values;
+        axios.post('/api/user/login',{
+          name,
+          email,
+          password
+        },{
+          headers: {'Content-type':'application/json'}
+        }).then(response=>{console.log(response.data)
+          setLoading(false);
+          navigate("/chat")
+        })
+        .catch(err=>console.log(err.message))
       }}
     >
       {({ values, handleChange, handleBlur, touched, errors }) => (
@@ -70,7 +84,7 @@ const Login = () => {
             />
 
             {/* Submit Button */}
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary" disabled={loading}>
               LOGIN
             </Button>
         

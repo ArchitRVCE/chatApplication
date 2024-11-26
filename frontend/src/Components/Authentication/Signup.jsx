@@ -3,6 +3,7 @@ import { TextField, RadioGroup, FormControlLabel, Radio, Checkbox,Input, Button,
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import axios from "axios"
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -24,8 +25,10 @@ const Signup = () => {
   const handleClickShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
+  const [loading,setLoading] = useState(false)
   return (
     <>
+
       <Formik
       initialValues={{
         name: '',
@@ -34,7 +37,18 @@ const Signup = () => {
       }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
-        console.log(values);
+        setLoading(true);
+        const {name,email,password} = values;
+        axios.post('/api/user',{
+          name,
+          email,
+          password
+        },{
+          headers: {'Content-type':'application/json'}
+        }).then(response=>{console.log(response.data)
+          setLoading(false);
+        })
+        .catch(err=>console.log(err.message))
       }}
     >
       {({ values, handleChange, handleBlur, touched, errors }) => (
@@ -89,7 +103,7 @@ const Signup = () => {
             
               
             {/* Submit Button */}
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary" disabled={loading}>
               SIGN UP
             </Button>
           </Box>
