@@ -22,10 +22,11 @@ export const registerUser = async(req,res) =>{
         password
     });
     if(newUser){
-        res.status(201).cookie(generateToken(newUser._id)).json({
+        res.status(201).json({
             _id: newUser._id,
             name: newUser.name,
             email: newUser.email,
+            token: generateToken(newUser._id)
         })
     }
     else{
@@ -39,20 +40,33 @@ export const authUser = async(req,res) =>{
     const {email,password} = req.body;
     if(!email || !password){
         res.status(400);
-        throw new Error("Please enter all fields");
+        //throw new Error("Please enter all fields");
     }
 
     const userExists = await User.findOne({email});
     if(!userExists){
-        res.status(400);
-        throw new Error('User does not exists');
+        return res.status(400).json({message:"User does not exists"});
+        //throw new Error('User does not exists');
     }
     
     if(bcrypt.compareSync(password,userExists.password)){
-        res.status(200).cookie(generateToken(userExists._id)).json({
+        return res.status(200).json({
             _id: userExists._id,
             name: userExists.name,
             email: userExists.email,
+            token: generateToken(userExists._id)
         })
     }
+    return res.status(400).json({message:"Password incorrect"})
+}
+
+export const allUsers = async(req,res)=>{
+    const keywords = req.query.search ? {
+        $or : [
+            { name: {$regex: req.query.search, $options: "i"}},
+            { email:{$regex: req.query.search, $options: "i"}}
+        ]
+    }:  {}
+    const users = await User.find(keywords).find({_id:{$ne:req.user_id}}).select("-password");
+    res.status(200).json({users})
 }

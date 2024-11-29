@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 dotenv.config();
 import mongoose from "mongoose"
 import userRoutes from "./Routes/userRoutes.js"
+import chatRoutes from "./Routes/chatRoutes.js"
 import {error,notFound} from "./Middleware/errorMiddleware.js"
 
 const app = express()
@@ -16,7 +17,6 @@ mongoose.connect(URI)
 .then(response=>console.log(`Databse connected`))
 .catch(e=>{console.log(`Error connected Databse: ${e.name}`)
     process.exit(0)})
-
 
 app.get('/',(req,res)=>{
     res.status(200).send('Api is running');
@@ -34,6 +34,7 @@ app.get('/',(req,res)=>{
 // })
 
 app.use('/api/user',userRoutes);
+app.use('/api/chat',chatRoutes);
 
 app.use(notFound);
 app.use(error);
