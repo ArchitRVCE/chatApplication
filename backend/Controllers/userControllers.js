@@ -67,6 +67,7 @@ export const allUsers = async(req,res)=>{
             { email:{$regex: req.query.search, $options: "i"}}
         ]
     }:  {}
+    console.log('keywords',keywords)
     const users = await User.find(keywords).find({_id:{$ne:req.user_id}}).select("-password");
     res.status(200).json({users})
 }

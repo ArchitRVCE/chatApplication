@@ -8,3 +8,20 @@
   background-size: cover;
   background-image: url('./bg_img1.jpg');
 }
+
+.user-profile-container{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    background: #b0dff2;
+    border-radius: 20px;
+    padding: inherit;
+    align-items: center;
+}
+
+.profile-image {
+	height: 25px;
+	width: 25px;
+	object-fit: cover;
+}

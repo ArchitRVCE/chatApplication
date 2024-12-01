@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Tabs from '@mui/material/Tabs';
@@ -6,10 +6,17 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Signup from '../Components/Authentication/Signup';
 import Login from '../Components/Authentication/Login';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   const [value, setValue] = React.useState(0);
-
+  const navigate = useNavigate()
+  useState(()=>{
+    const user = JSON.parse(localStorage.getItem("uerInfo"));
+    if(user){
+      navigate("/chat");
+    }
+  },[])
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
